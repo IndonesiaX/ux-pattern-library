@@ -1,20 +1,19 @@
 var gulp            = require('gulp'),
+    autoprefixer    = require('gulp-autoprefixer'),
+    browserSync     = require('browser-sync'),
     config          = require('../config').styles,
     handleErrors    = require('../util/handleErrors'),
-    browserSync     = require('browser-sync'),
     sass            = require('gulp-sass'),
-    autoprefixer    = require('gulp-autoprefixer'),
-    minifyCSS       = require('gulp-minify-css'),
-    size            = require('gulp-filesize');
+    sourcemaps      = require('gulp-sourcemaps');
 
 gulp.task('pldoc_styles', function () {
     return gulp.src(config.pldoc_src_files)
-        .pipe(sass())
+        .pipe(sourcemaps.init())
+        .pipe(sass(config.settings_development))
         .on('error', handleErrors)
-        .pipe(autoprefixer({ browsers: ['last 2 version'] }))
+        .pipe(autoprefixer())
+        .pipe(sourcemaps.write(config.settings_development.sourcemapsLocation))
         .pipe(gulp.dest(config.pldoc_local)) // move just for browersync + uncompressed local
-        .pipe(browserSync.reload({stream:true}))
-        .pipe(minifyCSS()) // minify and move for production
         .pipe(gulp.dest(config.pldoc_dest))
-        .pipe(size());
+        .pipe(browserSync.reload({stream:true}));
 });

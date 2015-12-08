@@ -1,10 +1,11 @@
 var gulp            = require('gulp'),
     runSequence     = require('run-sequence');
 
-gulp.task( 'default', function() {
+gulp.task( 'default', function(cb) {
     runSequence(
-        ['styles', 'scripts', 'images'],
-        ['pldoc_styles', 'pldoc_scripts', 'pldoc_images'],
-        'watch'
-    );
+        'build-development',
+        'watch',
+    cb);
 });
+
+
